@@ -1,0 +1,399 @@
+mysql> SELECT SUM(Amount) AS Total_Loan
+    -> FROM BORROW;
+ERROR 1146 (42S02): Table 'hijas.BORROW' doesn't exist
+mysql> select * from borrow;
++---------+---------+-----------+--------+
+| loan_no | cust_id | branch_id | amoumt |
++---------+---------+-----------+--------+
+|       1 | 1       | 21        |  21000 |
+|       2 | 2       | 22        |  21000 |
+|       3 | 3       | 23        |  21000 |
+|       4 | 4       | 24        |  21500 |
+|       5 | 4       | 24        |  21500 |
+|       6 | 4       | 24        |  21500 |
+|       7 | 6       | 24        |  21500 |
+|       8 | 5       | 27        |  22300 |
+|       9 | 8       | 27        |  22300 |
+|      10 | 8       | 27        |  22300 |
++---------+---------+-----------+--------+
+10 rows in set (0.01 sec)
+
+mysql> select sum(amoumt) as total_loan from borrow;
++------------+
+| total_loan |
++------------+
+|     215900 |
++------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT SUM(Amount) AS Total_Deposit
+    -> FROM DEPOSIT;
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select sum(ammount) as total_deposit from deposit;
++---------------+
+| total_deposit |
++---------------+
+|        559159 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(D.Amount) AS Max_Deposit
+    -> FROM DEPOSIT D
+    -> JOIN CUSTOMER C ON D.Cust_id = C.Cust_id
+    -> WHERE C.City = 'Ernakulam';
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select max(d.ammount) as max_deposit from deposit d join customer c on d.cust_id=c.cust_id where c.city='ernakulam';
++-------------+
+| max_deposit |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT COUNT(DISTINCT City) AS Total_Branch_Cities
+    -> FROM BRANCH;
+ERROR 1146 (42S02): Table 'hijas.BRANCH' doesn't exist
+mysql> select count(distinct city) as total_branch_cities from branch_1;
+\+---------------------+
+| total_branch_cities |
++---------------------+
+|                   9 |
++---------------------+
+1 row in set (0.01 sec)
+
+mysql> \jSELECT D.Branch_id, SUM(D.Amount) AS Branch_Wise_Deposit
+ERROR: 
+Unknown command '\j'.
+    -> FROM DEPOSIT D
+    -> GROUP BY D.Branch_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '\jSELECT D.Branch_id, SUM(D.Amount) AS Branch_Wise_Deposit
+FROM DEPOSIT D
+GROUP ' at line 1
+mysql> from deposit d group by d.bid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from deposit d group by d.bid' at line 1
+mysql> SELECT D.Branch_id, SUM(D.Amount) AS Branch_Wise_Deposit
+    -> FROM DEPOSIT D
+    -> GROUP BY D.Branch_id;
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select d.bid,sum(d.ammount) as Branch_Wise_Deposit from deposit d group by d,bid;
+ERROR 1054 (42S22): Unknown column 'd' in 'group statement'
+mysql> select deposit.bid,sum(deposit.ammount) as Branch_Wise_Deposit from deposit group by deposit.bid;
++------+---------------------+
+| bid  | Branch_Wise_Deposit |
++------+---------------------+
+|    1 |               11000 |
+|    2 |               11000 |
+|    3 |              110550 |
+|    4 |              110440 |
+|    5 |              115940 |
+|    6 |              117370 |
+|    7 |               25790 |
+|    8 |               25768 |
+|    9 |               25801 |
+|   10 |                5500 |
++------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT D.Branch_id, SUM(D.Amount) AS Total_Deposit
+    -> FROM DEPOSIT D
+    -> GROUP BY D.Branch_id
+    -> HAVING SUM(D.Amount) > 4000;
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select deposit.bid,sum(deposit.ammount) as total_deposit from deposit group by deposit.bid having sum(deposit.ammount)>4000;
++------+---------------+
+| bid  | total_deposit |
++------+---------------+
+|    1 |         11000 |
+|    2 |         11000 |
+|    3 |        110550 |
+|    4 |        110440 |
+|    5 |        115940 |
+|    6 |        117370 |
+|    7 |         25790 |
+|    8 |         25768 |
+|    9 |         25801 |
+|   10 |          5500 |
++------+---------------+
+10 rows in set (0.02 sec)
+
+mysql> SELECT C.C_name
+    -> FROM CUSTOMER C
+    -> JOIN DEPOSIT D ON C.Cust_id = D.Cust_id
+    -> WHERE D.Amount = (SELECT MIN(Amount) FROM DEPOSIT);
+ERROR 1146 (42S02): Table 'hijas.CUSTOMER' doesn't exist
+mysql> select c.cname from customer c join deposit d on c.cust_id=d.cust_id where d.ammount=(select min(ammount)from deposit;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select customer.cname from customer join deposit deposit on customer.cust_id=deposit.cust_id where deposit.ammount=(select min(ammount)from deposit;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select customer.cname from customer join deposit on customer.cust_id=deposit.cust_id where deposit.ammount=(select min(ammount)from deposit;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select customer.cname from customer join deposit on customer.cust_id=deposit.cust_id where deposit.ammount=(select min(ammount)from deposit;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select * from customer;
++---------+-------+-----------+------+
+| cust_id | cname | city      | bid  |
++---------+-------+-----------+------+
+| 1       | anil  | cherthala |    1 |
+| 10      | manu  | manglore  |   10 |
+| 2       | biju  | cherthala |    2 |
+| 3       | baji  | aroor     |    3 |
+| 4       | anu   | kollam    |    4 |
+| 5       | raju  | kochi     |    5 |
+| 6       | monu  | kochi     |    6 |
+| 7       | lessi | kochi     |    7 |
+| 8       | abi   | manglore  |    8 |
+| 9       | nani  | manglore  |    9 |
++---------+-------+-----------+------+
+10 rows in set (0.00 sec)
+
+mysql> select * from deposit;
++-------+---------+------------+---------+------+
+| ac_no | cust_id | open_date  | ammount | bid  |
++-------+---------+------------+---------+------+
+| 1236  | 1       | 2018-08-01 |   11000 |    1 |
+| 1237  | 2       | 2018-08-01 |   11000 |    2 |
+| 1238  | 3       | 2018-08-04 |  110550 |    3 |
+| 1239  | 4       | 2018-08-01 |  110440 |    4 |
+| 1240  | 5       | 2018-08-06 |  115940 |    5 |
+| 1241  | 6       | 2018-08-06 |  117370 |    6 |
+| 1242  | 7       | 2018-08-08 |   25790 |    7 |
+| 1243  | 8       | 2018-08-09 |   25768 |    8 |
+| 1244  | 9       | 2018-08-10 |   25801 |    9 |
+| 1245  | 10      | 2018-08-12 |    5500 |   10 |
++-------+---------+------------+---------+------+
+10 rows in set (0.00 sec)
+
+mysql> select customer.cname from customer join deposit on customer.cust_id=deposit.cust_id where deposit.ammount=(select min(ammount)from deposit);
++-------+
+| cname |
++-------+
+| manu  |
++-------+
+1 row in set (0.01 sec)
+
+mysql> SELECT COUNT(DISTINCT D.Cust_id) AS Total_Depositors
+    -> FROM DEPOSIT D
+    -> JOIN CUSTOMER C ON D.Cust_id = C.Cust_id
+    -> WHERE C.City = 'Cherthala';
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select count(distinct d.cust_id) as Total_depts from deposit d join customer c on d.cust_id=c.cust_id where c.city='cherthala';
++-------------+
+| Total_depts |
++-------------+
+|           2 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(D.Amount) AS Max_Deposit
+    -> FROM DEPOSIT D
+    -> JOIN BRANCH B ON D.Branch_id = B.Branch_id
+    -> WHERE B.City = 'Alappuzha';
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select max(d.ammount) as max_deposit from deposit d join branch_1 b on d.bid=b.bid where b.city='alappuzha';
+ERROR 1054 (42S22): Unknown column 'b.bid' in 'on clause'
+mysql> select * from branch_1;
++-----------+------------+-----------+
+| branch_id | city       | bname     |
++-----------+------------+-----------+
+| 21        | aroor      | aroor     |
+| 22        | eramalloor | aroor     |
+| 23        | vytila     | vytila    |
+| 24        | vytila     | kochi     |
+| 25        | tvr        | kochi     |
+| 26        | koltr      | kochi     |
+| 27        | cherthala  | cherthala |
+| 28        | manglore   | mangalore |
+| 29        | ksd        | kasaragod |
+| 30        | alp        | alappuzha |
++-----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> select max(d.ammount) as max_deposit from deposit d join branch_1 b on d.bid=b.branch.id where b.city='alappuzha';
+ERROR 1054 (42S22): Unknown column 'b.branch.id' in 'on clause'
+mysql> select max(d.ammount) as max_deposit from deposit d join branch_1 b on d.bid=b.branch_id where b.city='alappuzha';
++-------------+
+| max_deposit |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(*) AS Total_Customers_Ernakulam
+    -> FROM CUSTOMER
+    -> WHERE City = 'Ernakulam';
+ERROR 1146 (42S02): Table 'hijas.CUSTOMER' doesn't exist
+mysql> select count
+    -> select count(*) as Total_Customers_Ernakulam
+    -> select count(*) as Total_Customers_Ernakulam from customer where city= 'ernakulam';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select count(*) as Total_Customers_Ernakulam
+select count(*) as Total_Customers_' at line 2
+mysql>  select count(*) as Total_Customers_Ernakulam from customer where city= 'ernakulam';
++---------------------------+
+| Total_Customers_Ernakulam |
++---------------------------+
+|                         0 |
++---------------------------+
+1 row in set (0.00 sec)
+
+mysql>  select count(*) as Total_Customers_Ernakulam from customer where city= 'kochi';
++---------------------------+
+| Total_Customers_Ernakulam |
++---------------------------+
+|                         3 |
++---------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT C.Cust_id, C.C_name
+    -> FROM CUSTOMER C
+    -> WHERE C.City NOT IN ('Ernakulam', 'Alappuzha');
+ERROR 1146 (42S02): Table 'hijas.CUSTOMER' doesn't exist
+mysql> select c.cust_id,c.cname from customer c where c.city not in ('ernakulam','alappuzha');
++---------+-------+
+| cust_id | cname |
++---------+-------+
+| 1       | anil  |
+| 10      | manu  |
+| 2       | biju  |
+| 3       | baji  |
+| 4       | anu   |
+| 5       | raju  |
+| 6       | monu  |
+| 7       | lessi |
+| 8       | abi   |
+| 9       | nani  |
++---------+-------+
+10 rows in set (0.01 sec)
+
+mysql> SELECT Cust_id, C_name
+    -> FROM CUSTOMER
+    -> ORDER BY C_name DESC;
+ERROR 1146 (42S02): Table 'hijas.CUSTOMER' doesn't exist
+mysql> select cust_id,cname from customer order by cname desc;
++---------+-------+
+| cust_id | cname |
++---------+-------+
+| 5       | raju  |
+| 9       | nani  |
+| 6       | monu  |
+| 10      | manu  |
+| 7       | lessi |
+| 2       | biju  |
+| 3       | baji  |
+| 4       | anu   |
+| 1       | anil  |
+| 8       | abi   |
++---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT D.Branch_id, COUNT(DISTINCT D.Cust_id) AS Total_Depositors
+    -> FROM DEPOSIT D
+    -> GROUP BY D.Branch_id;
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select d.bid,count(distinct d.cust_id) as total depositors from deposit d group by d.bid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'depositors from deposit d group by d.bid' at line 1
+mysql> select * from deposit;
++-------+---------+------------+---------+------+
+| ac_no | cust_id | open_date  | ammount | bid  |
++-------+---------+------------+---------+------+
+| 1236  | 1       | 2018-08-01 |   11000 |    1 |
+| 1237  | 2       | 2018-08-01 |   11000 |    2 |
+| 1238  | 3       | 2018-08-04 |  110550 |    3 |
+| 1239  | 4       | 2018-08-01 |  110440 |    4 |
+| 1240  | 5       | 2018-08-06 |  115940 |    5 |
+| 1241  | 6       | 2018-08-06 |  117370 |    6 |
+| 1242  | 7       | 2018-08-08 |   25790 |    7 |
+| 1243  | 8       | 2018-08-09 |   25768 |    8 |
+| 1244  | 9       | 2018-08-10 |   25801 |    9 |
+| 1245  | 10      | 2018-08-12 |    5500 |   10 |
++-------+---------+------------+---------+------+
+10 rows in set (0.00 sec)
+
+mysql> select d.bid,count(distinct d.cust_id) as total_depositors from deposit d group by d.bid;
++------+------------------+
+| bid  | total_depositors |
++------+------------------+
+|    1 |                1 |
+|    2 |                1 |
+|    3 |                1 |
+|    4 |                1 |
+|    5 |                1 |
+|    6 |                1 |
+|    7 |                1 |
+|    8 |                1 |
+|    9 |                1 |
+|   10 |                1 |
++------+------------------+
+10 rows in set (0.01 sec)
+
+mysql> SELECT B.Branch_id, B.bname
+    -> FROM BRANCH B
+    -> LEFT JOIN BORROW BO ON B.Branch_id = BO.Branch_id
+    -> WHERE BO.Loan_no IS NULL;
+ERROR 1146 (42S02): Table 'hijas.BRANCH' doesn't exist
+mysql> sSELECT B.Branch_id, B.bname FROM BRANCH B
+    -> SELECT B.Branch_id,b.bname from brach_1 b left join borrow bo on b.branch_id=bo.brach_id where bo.loan_no is null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sSELECT B.Branch_id, B.bname FROM BRANCH B
+SELECT B.Branch_id,b.bname from brach' at line 1
+mysql> select * from brach_1;
+ERROR 1146 (42S02): Table 'hijas.brach_1' doesn't exist
+mysql> select * from brnach_1;
+ERROR 1146 (42S02): Table 'hijas.brnach_1' doesn't exist
+mysql> select * from branch_1;
++-----------+------------+-----------+
+| branch_id | city       | bname     |
++-----------+------------+-----------+
+| 21        | aroor      | aroor     |
+| 22        | eramalloor | aroor     |
+| 23        | vytila     | vytila    |
+| 24        | vytila     | kochi     |
+| 25        | tvr        | kochi     |
+| 26        | koltr      | kochi     |
+| 27        | cherthala  | cherthala |
+| 28        | manglore   | mangalore |
+| 29        | ksd        | kasaragod |
+| 30        | alp        | alappuzha |
++-----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT b.branch_id, b.bname FROM branch_1 b  left join borrow bo on b.branch_id=bo.brach_id where bo.loan_no is null;
+ERROR 1054 (42S22): Unknown column 'bo.brach_id' in 'on clause'
+mysql> select * from borrow;
++---------+---------+-----------+--------+
+| loan_no | cust_id | branch_id | amoumt |
++---------+---------+-----------+--------+
+|       1 | 1       | 21        |  21000 |
+|       2 | 2       | 22        |  21000 |
+|       3 | 3       | 23        |  21000 |
+|       4 | 4       | 24        |  21500 |
+|       5 | 4       | 24        |  21500 |
+|       6 | 4       | 24        |  21500 |
+|       7 | 6       | 24        |  21500 |
+|       8 | 5       | 27        |  22300 |
+|       9 | 8       | 27        |  22300 |
+|      10 | 8       | 27        |  22300 |
++---------+---------+-----------+--------+
+10 rows in set (0.00 sec)
+
+mysql> select b.branch_id, b.bname FROM branch_1 b  left join borrow bo on b.branch_id=bo.branch_id where bo.loan_no is null;
++-----------+-----------+
+| branch_id | bname     |
++-----------+-----------+
+| 25        | kochi     |
+| 26        | kochi     |
+| 28        | mangalore |
+| 29        | kasaragod |
+| 30        | alappuzha |
++-----------+-----------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT COUNT(DISTINCT D.Cust_id) AS Total_Customers
+    -> FROM DEPOSIT D
+    -> WHERE D.Open_date > '2016-01-01';
+ERROR 1146 (42S02): Table 'hijas.DEPOSIT' doesn't exist
+mysql> select count(distinct d.cust_id) as total_customers from deposit d where d.open_date > '2016-01-01';
++-----------------+
+| total_customers |
++-----------------+
+|              10 |
++-----------------+
+1 row in set (0.01 sec)
