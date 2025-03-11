@@ -1,0 +1,260 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Abhinav            |
+| Student            |
+| abhinav            |
+| bank               |
+| hijas              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+9 rows in set (0.49 sec)
+
+mysql> use hijas;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_hijas |
++-----------------+
+| borrow          |
+| branch_1        |
+| customer        |
+| deposit         |
++-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select cust_id from deposit where ammount>10000;
++---------+
+| cust_id |
++---------+
+| 3       |
+| 4       |
+| 5       |
+| 6       |
+| 7       |
+| 8       |
+| 9       |
++---------+
+7 rows in set (0.02 sec)
+
+mysql> select cust_id from Depoait where open_date>'2016-01-01';
+ERROR 1146 (42S02): Table 'hijas.Depoait' doesn't exist
+mysql> select cust_id from Deposit where open_date>'2016-01-01';
+ERROR 1146 (42S02): Table 'hijas.Deposit' doesn't exist
+mysql> select cust_id from deposit where open_date>'2016-01-01';
++---------+
+| cust_id |
++---------+
+| 1       |
+| 2       |
+| 3       |
+| 4       |
+| 5       |
+| 6       |
+| 7       |
+| 8       |
+| 9       |
+| 10      |
++---------+
+10 rows in set (0.08 sec)
+
+mysql> select acc_no,cust_id from deposit where ammount between 40000 and 80000;
+ERROR 1054 (42S22): Unknown column 'acc_no' in 'field list'
+mysql> select Acc_no,cust_id from deposit where ammount between 40000 and 80000;
+ERROR 1054 (42S22): Unknown column 'Acc_no' in 'field list'
+mysql> select * from deposit;
++-------+---------+------------+---------+
+| ac_no | cust_id | open_date  | ammount |
++-------+---------+------------+---------+
+| 1236  | 1       | 2018-08-01 |   10000 |
+| 1237  | 2       | 2018-08-01 |   10000 |
+| 1238  | 3       | 2018-08-04 |  100500 |
+| 1239  | 4       | 2018-08-01 |  100400 |
+| 1240  | 5       | 2018-08-06 |  105400 |
+| 1241  | 6       | 2018-08-06 |  106700 |
+| 1242  | 7       | 2018-08-08 |   23445 |
+| 1243  | 8       | 2018-08-09 |   23425 |
+| 1244  | 9       | 2018-08-10 |   23455 |
+| 1245  | 10      | 2018-08-12 |    5000 |
++-------+---------+------------+---------+
+10 rows in set (0.02 sec)
+
+mysql> select ac_no,cust_id from deposit where ammount between 40000 and 80000;
+Empty set (0.01 sec)
+
+mysql> select c_name from customer where c_name like 's%';
+ERROR 1054 (42S22): Unknown column 'c_name' in 'field list'
+mysql> select * from customer;
++---------+-------+-----------+
+| cust_id | cname | city      |
++---------+-------+-----------+
+| 1       | anil  | cherthala |
+| 10      | manu  | manglore  |
+| 2       | biju  | cherthala |
+| 3       | baji  | aroor     |
+| 4       | anu   | kollam    |
+| 5       | raju  | kochi     |
+| 6       | monu  | kochi     |
+| 7       | lessi | kochi     |
+| 8       | abi   | manglore  |
+| 9       | nani  | manglore  |
++---------+-------+-----------+
+10 rows in set (0.05 sec)
+
+mysql> select cname from customer where c_name like 's%';
+ERROR 1054 (42S22): Unknown column 'c_name' in 'where clause'
+mysql> select cname from customer where cname like 's%';
+Empty set (0.02 sec)
+
+mysql> select cname from customer where cname like '_a%';
++-------+
+| cname |
++-------+
+| manu  |
+| baji  |
+| raju  |
+| nani  |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> select cname,ammount from customer join deposit on customer.cust_id=deposit.cust_id where length(cname)=5;
++-------+---------+
+| cname | ammount |
++-------+---------+
+| lessi |   23445 |
++-------+---------+
+1 row in set (0.02 sec)
+
+mysql> select * from borrow;
+\+---------+---------+-----------+--------+
+| loan_no | cust_id | branch_id | amoumt |
++---------+---------+-----------+--------+
+|       1 | 1       | 21        |  21000 |
+|       2 | 2       | 22        |  21000 |
+|       3 | 3       | 23        |  21000 |
+|       4 | 4       | 24        |  21500 |
+|       5 | 4       | 24        |  21500 |
+|       6 | 4       | 24        |  21500 |
+|       7 | 6       | 24        |  21500 |
+|       8 | 5       | 27        |  22300 |
+|       9 | 8       | 27        |  22300 |
+|      10 | 8       | 27        |  22300 |
++---------+---------+-----------+--------+
+10 rows in set (0.03 sec)
+
+mysql> select cust_id,loan_no,amoumt from borrow;
++---------+---------+--------+
+| cust_id | loan_no | amoumt |
++---------+---------+--------+
+| 1       |       1 |  21000 |
+| 2       |       2 |  21000 |
+| 3       |       3 |  21000 |
+| 4       |       4 |  21500 |
+| 4       |       5 |  21500 |
+| 4       |       6 |  21500 |
+| 6       |       7 |  21500 |
+| 5       |       8 |  22300 |
+| 8       |       9 |  22300 |
+| 8       |      10 |  22300 |
++---------+---------+--------+
+10 rows in set (0.00 sec)
+
+mysql> select distinct customer cust_id,cname from customer join deposit on customer cust_id=deposit_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cust_id=deposit_id' at line 1
+mysql> select distinct customer cust_id,cname from customer join deposit on customer.cust_id=deposit.cust_id;
+ERROR 1054 (42S22): Unknown column 'customer' in 'field list'
+mysql> select distinct customer cust_id,cname from customer join deposit on customer.cust_id=deposit;
+ERROR 1054 (42S22): Unknown column 'customer' in 'field list'
+mysql> select distinct customer.cust_id,cname from customer join deposit on customer.cust_id=deposit.cust_id;
++---------+-------+
+| cust_id | cname |
++---------+-------+
+| 1       | anil  |
+| 2       | biju  |
+| 3       | baji  |
+| 4       | anu   |
+| 5       | raju  |
+| 6       | monu  |
+| 7       | lessi |
+| 8       | abi   |
+| 9       | nani  |
+| 10      | manu  |
++---------+-------+
+10 rows in set (0.12 sec)
+
+mysql> select distinct cname from customer where cust_id in(select cust_id from deposit) and cust_id not in (select cust_id from borrow);
++-------+
+| cname |
++-------+
+| lessi |
+| nani  |
+| manu  |
++-------+
+3 rows in set (0.02 sec)
+
+mysql> select distinct cname from customer where cust_id in(select cust_id from deposit) and cust_id in (select cust_id from borrow);
++-------+
+| cname |
++-------+
+| anil  |
+| biju  |
+| baji  |
+| anu   |
+| raju  |
+| monu  |
+| abi   |
++-------+
+7 rows in set (0.01 sec)
+
+mysql> select customer.cust_id,cname,coalese(deposit.ammount,borrow.amoumt)as ammount from customer left join deposit on customer.cust_id=deposit.cust_id left join borrow on customer.cust_id=borrow.cust_id;
+ERROR 1305 (42000): FUNCTION hijas.coalese does not exist
+mysql> select customer.cust_id,cname,coalesce(deposit.ammount,borrow.amoumt)as ammount from customer left join deposit on customer.cust_id=deposit.cust_id left join borrow on customer.cust_id=borrow.cust_id;
++---------+-------+---------+
+| cust_id | cname | ammount |
++---------+-------+---------+
+| 1       | anil  |   10000 |
+| 10      | manu  |    5000 |
+| 2       | biju  |   10000 |
+| 3       | baji  |  100500 |
+| 4       | anu   |  100400 |
+| 4       | anu   |  100400 |
+| 4       | anu   |  100400 |
+| 5       | raju  |  105400 |
+| 6       | monu  |  106700 |
+| 7       | lessi |   23445 |
+| 8       | abi   |   23425 |
+| 8       | abi   |   23425 |
+| 9       | nani  |   23455 |
++---------+-------+---------+
+13 rows in set (0.00 sec)
+
+mysql> select distinct customer.city from customer join deposit on customer.cust_id=deposit.cust_id join branch_1 on deposit.b_id=branch_1.b_id where b_name='cherthala';
+ERROR 1054 (42S22): Unknown column 'b_name' in 'where clause'
+mysql> select * from branch_1;
++-----------+------------+-----------+
+| branch_id | city       | bname     |
++-----------+------------+-----------+
+| 21        | aroor      | aroor     |
+| 22        | eramalloor | aroor     |
+| 23        | vytila     | vytila    |
+| 24        | vytila     | kochi     |
+| 25        | tvr        | kochi     |
+| 26        | koltr      | kochi     |
+| 27        | cherthala  | cherthala |
+| 28        | manglore   | mangalore |
+| 29        | ksd        | kasaragod |
+| 30        | alp        | alappuzha |
++-----------+------------+-----------+
+10 rows in set (0.05 sec)
+
+mysql> select distinct customer.city from customer join deposit on customer.cust_id=deposit.cust_id join branch_1 on deposit.branch_id=branch_1.branch_id where bname='cherthala';
+ERROR 1054 (42S22): Unknown column 'deposit.branch_id' in 'on clause'
+mysql> select distinct customer.city from customer join deposit on customer.cust_id=deposit.cust_id join branch_1 on deposit.cust_id=branch_1.branch_id where bname='cherthala';
+Empty set (0.04 sec)
