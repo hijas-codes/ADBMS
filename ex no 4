@@ -1,0 +1,438 @@
+create table Location(location_id int primary key,regional_group varchar(20));
+CREATE TABLE Department (Department_Id INT PRIMARY KEY,Name VARCHAR(50),Location_Id INT);
+CREATE TABLE Job (Job_Id INT,Funtion VARCHAR(30));
+CREATE TABLE Employee (Employee_Id INT PRIMARY KEY,Lastname VARCHAR(50),Firstname VARCHAR(50),Middlename VARCHAR(50),Job_Id INT,Manager_Id INT,Hiredate DATE,Salary INT,Department_Id INT);
+CREATE TABLE Loan (Employee_Id INT,Firstname VARCHAR(50),Loan_Amount DECIMAL(10, 2),PRIMARY KEY (Employee_Id));
+
+INSERT INTO Location (Location_Id, Regional_Group) VALUES
+    -> (1, 'North America'),
+    -> (2, 'Europe'),
+    -> (3, 'Asia'),
+    -> (4, 'Africa'),
+    -> (5, 'Australia'),
+    -> (6, 'South America'),
+    -> (7, 'North America'),
+    -> (8, 'Europe'),
+    -> (9, 'Asia'),
+    -> (10, 'Africa');
+INSERT INTO Department (Department_Id, Name, Location_Id) VALUES
+    -> (1, 'Sales', 1),
+    -> (2, 'Marketing', 2),
+    -> (3, 'HR', 3),
+    -> (4, 'Finance', 4),
+    -> (5, 'IT', 5),
+    -> (6, 'Operations', 6),
+    -> (7, 'Customer Service', 7),
+    -> (8, 'R&D', 8),
+    -> (9, 'Legal', 9),
+    -> (10, 'Accounting', 10);
+
+INSERT INTO Job (Job_Id, Funtion) VALUES (1, 'Manager'), (2, 'Clerk'), (3, 'Software Engineer'), (4, 'Data Analyst'), (5, 'HR Specialist'),
+(6, 'Sales Associate'), (7, 'Marketing Director'), (8, 'Accountant'), (9, 'IT Support'), (10, 'Legal Advisor');
+
+INSERT INTO Employee (Employee_Id, Lastname, Firstname, Middlename, Job_Id, Manager_Id, Hiredate, Salary, Department_Id) VALUES
+    -> (1, 'Smith', 'John', 'A', 1, NULL, '2021-01-15', 75000.00, 1),
+    -> (2, 'Johnson', 'Emma', 'B', 2, 1, '2020-03-22', 50000.00, 2),
+    -> (3, 'Williams', 'Liam', 'C', 3, 1, '2019-07-30', 60000.00, 3),
+    -> (4, 'Brown', 'Olivia', 'D', 4, 2, '2018-05-10', 85000.00, 4),
+    -> (5, 'Jones', 'Noah', 'E', 5, 3, '2021-09-05', 70000.00, 5),
+    -> (6, 'Miller', 'Sophia', 'F', 6, 4, '2020-02-17', 45000.00, 6),
+    -> (7, 'Davis', 'Isabella', 'G', 7, 5, '2017-11-21', 95000.00, 7),
+    -> (8, 'Garcia', 'Mason', 'H', 8, 6, '2022-06-13', 55000.00, 8),
+    -> (9, 'Rodriguez', 'Lucas', 'I', 9, 7, '2018-08-05', 72000.00, 9),
+    -> (10, 'Martinez', 'Amelia', 'J', 10, 8, '2019-12-29', 80000.00, 10);
+
+INSERT INTO Loan (Employee_Id, Firstname, Loan_Amount) VALUES
+    -> (1, 'John', 15000.00),
+    -> (2, 'Emma', 10000.00),
+    -> (3, 'Liam', 12000.00),
+    -> (4, 'Olivia', 25000.00),
+    -> (5, 'Noah', 11000.00),
+    -> (6, 'Sophia', 8000.00),
+    -> (7, 'Isabella', 5000.00),
+    -> (8, 'Mason', 13000.00),
+    -> (9, 'Lucas', 20000.00),
+    -> (10, 'Amelia', 15000.00);
+SELECT E.Employee_Id, E.Lastname, E.Firstname, L.Loan_Amount
+    -> FROM Employee E
+    -> INNER JOIN Loan L ON E.Employee_Id = L.Employee_Id;
++-------------+-----------+-----------+-------------+
+| Employee_Id | Lastname  | Firstname | Loan_Amount |
++-------------+-----------+-----------+-------------+
+|           1 | Smith     | John      |    15000.00 |
+|           2 | Johnson   | Emma      |    10000.00 |
+|           3 | Williams  | Liam      |    12000.00 |
+|           4 | Brown     | Olivia    |    25000.00 |
+|           5 | Jones     | Noah      |    11000.00 |
+|           6 | Miller    | Sophia    |     8000.00 |
+|           7 | Davis     | Isabella  |     5000.00 |
+|           8 | Garcia    | Mason     |    13000.00 |
+|           9 | Rodriguez | Lucas     |    20000.00 |
+|          10 | Martinez  | Amelia    |    15000.00 |
++-------------+-----------+-----------+-------------+
+
+SELECT E.Employee_Id, E.Lastname, E.Firstname, L.Loan_Amount
+    -> FROM Employee E
+    -> LEFT JOIN Loan L ON E.Employee_Id = L.Employee_Id;
++-------------+-----------+-----------+-------------+
+| Employee_Id | Lastname  | Firstname | Loan_Amount |
++-------------+-----------+-----------+-------------+
+|           1 | Smith     | John      |    15000.00 |
+|           2 | Johnson   | Emma      |    10000.00 |
+|           3 | Williams  | Liam      |    12000.00 |
+|           4 | Brown     | Olivia    |    25000.00 |
+|           5 | Jones     | Noah      |    11000.00 |
+|           6 | Miller    | Sophia    |     8000.00 |
+|           7 | Davis     | Isabella  |     5000.00 |
+|           8 | Garcia    | Mason     |    13000.00 |
+|           9 | Rodriguez | Lucas     |    20000.00 |
+|          10 | Martinez  | Amelia    |    15000.00 |
++-------------+-----------+-----------+-------------+
+select * from Location;
++-------------+----------------+
+| location_id | regional_group |
++-------------+----------------+
+|           1 | North America  |
+|           2 | Europe         |
+|           3 | Asia           |
+|           4 | Africa         |
+|           5 | Australia      |
+|           6 | South America  |
+|           7 | North America  |
+|           8 | Europe         |
+|           9 | Asia           |
+|          10 | Africa         |
++-------------+----------------+
+select * from Department;
++---------------+------------------+-------------+
+| Department_Id | Name             | Location_Id |
++---------------+------------------+-------------+
+|             1 | Sales            |           1 |
+|             2 | Marketing        |           2 |
+|             3 | HR               |           3 |
+|             4 | Finance          |           4 |
+|             5 | IT               |           5 |
+|             6 | Operations       |           6 |
+|             7 | Customer Service |           7 |
+|             8 | R&D              |           8 |
+|             9 | Legal            |           9 |
+|            10 | Accounting       |          10 |
++---------------+------------------+-------------+
+select * from Job;
++--------+--------------------+
+| Job_Id | Funtion            |
++--------+--------------------+
+|      1 | Manager            |
+|      2 | Clerk              |
+|      3 | Software Engineer  |
+|      4 | Data Analyst       |
+|      5 | HR Specialist      |
+|      6 | Sales Associate    |
+|      7 | Marketing Director |
+|      8 | Accountant         |
+|      9 | IT Support         |
+|     10 | Legal Advisor      |
++--------+--------------------+
+select * from Employee;
++-------------+-----------+-----------+------------+--------+------------+------------+--------+---------------+
+| Employee_Id | Lastname  | Firstname | Middlename | Job_Id | Manager_Id | Hiredate   | Salary | Department_Id |
++-------------+-----------+-----------+------------+--------+------------+------------+--------+---------------+
+|           1 | Smith     | John      | A          |      1 |       NULL | 2021-01-15 |  75000 |             1 |
+|           2 | Johnson   | Emma      | B          |      2 |          1 | 2020-03-22 |  50000 |             2 |
+|           3 | Williams  | Liam      | C          |      3 |          1 | 2019-07-30 |  60000 |             3 |
+|           4 | Brown     | Olivia    | D          |      4 |          2 | 2018-05-10 |  85000 |             4 |
+|           5 | Jones     | Noah      | E          |      5 |          3 | 2021-09-05 |  70000 |             5 |
+|           6 | Miller    | Sophia    | F          |      6 |          4 | 2020-02-17 |  45000 |             6 |
+|           7 | Davis     | Isabella  | G          |      7 |          5 | 2017-11-21 |  95000 |             7 |
+|           8 | Garcia    | Mason     | H          |      8 |          6 | 2022-06-13 |  55000 |             8 |
+|           9 | Rodriguez | Lucas     | I          |      9 |          7 | 2018-08-05 |  72000 |             9 |
+|          10 | Martinez  | Amelia    | J          |     10 |          8 | 2019-12-29 |  80000 |            10 |
++-------------+-----------+-----------+------------+--------+------------+------------+--------+---------------+
+select * from Loan;
++-------------+-----------+-------------+
+| Employee_Id | Firstname | Loan_Amount |
++-------------+-----------+-------------+
+|           1 | John      |    15000.00 |
+|           2 | Emma      |    10000.00 |
+|           3 | Liam      |    12000.00 |
+|           4 | Olivia    |    25000.00 |
+|           5 | Noah      |    11000.00 |
+|           6 | Sophia    |     8000.00 |
+|           7 | Isabella  |     5000.00 |
+|           8 | Mason     |    13000.00 |
+|           9 | Lucas     |    20000.00 |
+|          10 | Amelia    |    15000.00 |
++-------------+-----------+-------------+
+SELECT E.Employee_Id, E.Lastname, E.Firstname, L.Loan_Amount
+    -> FROM Employee E
+    -> RIGHT JOIN Loan L ON E.Employee_Id = L.Employee_Id;
++-------------+-----------+-----------+-------------+
+| Employee_Id | Lastname  | Firstname | Loan_Amount |
++-------------+-----------+-----------+-------------+
+|           1 | Smith     | John      |    15000.00 |
+|           2 | Johnson   | Emma      |    10000.00 |
+|           3 | Williams  | Liam      |    12000.00 |
+|           4 | Brown     | Olivia    |    25000.00 |
+|           5 | Jones     | Noah      |    11000.00 |
+|           6 | Miller    | Sophia    |     8000.00 |
+|           7 | Davis     | Isabella  |     5000.00 |
+|           8 | Garcia    | Mason     |    13000.00 |
+|           9 | Rodriguez | Lucas     |    20000.00 |
+|          10 | Martinez  | Amelia    |    15000.00 |
++-------------+-----------+-----------+-------------+
+FULL OUTER JOIN (MySQL doesn't directly support this, but you can simulate it using UNION)
+mysql> SELECT E.Employee_Id, E.Lastname, E.Firstname, L.Loan_Amount
+    -> FROM Employee E
+    -> LEFT JOIN Loan L ON E.Employee_Id = L.Employee_Id
+    -> UNION
+    -> SELECT E.Employee_Id, E.Lastname, E.Firstname, L.Loan_Amount
+    -> FROM Employee E
+    -> RIGHT JOIN Loan L ON E.Employee_Id = L.Employee_Id;
++-------------+-----------+-----------+-------------+
+| Employee_Id | Lastname  | Firstname | Loan_Amount |
++-------------+-----------+-----------+-------------+
+|           1 | Smith     | John      |    15000.00 |
+|           2 | Johnson   | Emma      |    10000.00 |
+|           3 | Williams  | Liam      |    12000.00 |
+|           4 | Brown     | Olivia    |    25000.00 |
+|           5 | Jones     | Noah      |    11000.00 |
+|           6 | Miller    | Sophia    |     8000.00 |
+|           7 | Davis     | Isabella  |     5000.00 |
+|           8 | Garcia    | Mason     |    13000.00 |
+|           9 | Rodriguez | Lucas     |    20000.00 |
+|          10 | Martinez  | Amelia    |    15000.00 |
++-------------+-----------+-----------+-------------+
+SELECT Employee_Id FROM Employee
+    -> UNION
+    -> SELECT Employee_Id FROM Loan;
++-------------+
+| Employee_Id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
++-------------+
+SELECT Employee_Id FROM Employee
+    -> UNION ALL
+    -> SELECT Employee_Id FROM Loan;
++-------------+
+| Employee_Id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
++-------------+
+SELECT Employee_Id FROM Employee
+    -> INTERSECT
+    -> SELECT Employee_Id FROM Loan;
++-------------+
+| Employee_Id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
++-------------+
+
+SELECT Employee_Id FROM Employee
+    -> EXCEPT
+    -> SELECT Employee_Id FROM Loan;
+Empty set (0.00 sec)
+
+SELECT COUNT(*) AS Sales_Employees
+    -> FROM Employee E
+    -> JOIN Department D ON E.Department_Id = D.Department_Id
+    -> WHERE D.Name = 'Sales';
++-----------------+
+| Sales_Employees |
++-----------------+
+|               1 |
++-----------------+
+
+SELECT Employee_Id, Lastname, Firstname
+    -> FROM Employee
+    -> WHERE Department_Id NOT IN (10, 30);
++-------------+-----------+-----------+
+| Employee_Id | Lastname  | Firstname |
++-------------+-----------+-----------+
+|           1 | Smith     | John      |
+|           2 | Johnson   | Emma      |
+|           3 | Williams  | Liam      |
+|           4 | Brown     | Olivia    |
+|           5 | Jones     | Noah      |
+|           6 | Miller    | Sophia    |
+|           7 | Davis     | Isabella  |
+|           8 | Garcia    | Mason     |
+|           9 | Rodriguez | Lucas     |
++-------------+-----------+-----------+
+SELECT Employee_Id, Lastname
+    -> FROM Employee
+    -> ORDER BY Salary DESC;
++-------------+-----------+
+| Employee_Id | Lastname  |
++-------------+-----------+
+|           7 | Davis     |
+|           4 | Brown     |
+|          10 | Martinez  |
+|           1 | Smith     |
+|           9 | Rodriguez |
+|           5 | Jones     |
+|           3 | Williams  |
+|           8 | Garcia    |
+|           2 | Johnson   |
+|           6 | Miller    |
++-------------+-----------+
+SELECT Department_Id, COUNT(*) AS Num_Employees
+    -> FROM Employee
+    -> GROUP BY Department_Id;
++---------------+---------------+
+| Department_Id | Num_Employees |
++---------------+---------------+
+|             1 |             1 |
+|             2 |             1 |
+|             3 |             1 |
+|             4 |             1 |
+|             5 |             1 |
+|             6 |             1 |
+|             7 |             1 |
+|             8 |             1 |
+|             9 |             1 |
+|            10 |             1 |
++---------------+---------------+
+SELECT Department_Id
+    -> FROM Employee
+    -> GROUP BY Department_Id
+    -> HAVING COUNT(*) >= 4;
+Empty set (0.02 sec)
+
+
+SELECT Employee_Id, Lastname, Firstname, Salary
+    -> FROM Employee
+    -> WHERE Salary = (SELECT MAX(Salary) FROM Employee);
++-------------+----------+-----------+--------+
+| Employee_Id | Lastname | Firstname | Salary |
++-------------+----------+-----------+--------+
+|           7 | Davis    | Isabella  |  95000 |
++-------------+----------+-----------+--------+
+
+UPDATE Employee
+    -> SET Salary = Salary * 1.10
+    -> WHERE Job_Id = (SELECT Job_Id FROM Job WHERE Funtion = 'Clerk');
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+SELECT Employee_Id, Lastname, Firstname, Salary
+    -> FROM Employee
+    -> WHERE Job_Id = (SELECT Job_Id FROM Job WHERE Funtion = 'Clerk' LIMIT 1);
++-------------+----------+-----------+--------+
+| Employee_Id | Lastname | Firstname | Salary |
++-------------+----------+-----------+--------+
+|           2 | Johnson  | Emma      |  55000 |
++-------------+----------+-----------+--------+
+
+SELECT Employee_Id, Lastname, Firstname, Salary FROM Employee WHERE Job_Id = (SELECT Job_Id FROM Job WHERE Funtion = 'Clerk');
++-------------+----------+-----------+--------+
+| Employee_Id | Lastname | Firstname | Salary |
++-------------+----------+-----------+--------+
+|           2 | Johnson  | Emma      |  55000 |
++-------------+----------+-----------+--------+
+
+DELETE FROM Employee
+    -> WHERE Department_Id = (SELECT Department_Id FROM Department WHERE Name = 'Accounting');
+Query OK, 1 row affected (0.06 sec)
+
+SELECT D.Department_Id, D.Name
+    -> FROM Department D
+    -> LEFT JOIN Employee E ON D.Department_Id = E.Department_Id
+    -> WHERE E.Employee_Id IS NULL;
++---------------+------------+
+| Department_Id | Name       |
++---------------+------------+
+|            10 | Accounting |
++---------------+------------+
+
+SELECT Department_Id,
+    ->        MAX(Salary) AS Max_Salary,
+    ->        MIN(Salary) AS Min_Salary,
+    ->        AVG(Salary) AS Avg_Salary
+    -> FROM Employee
+    -> GROUP BY Department_Id;
++---------------+------------+------------+------------+
+| Department_Id | Max_Salary | Min_Salary | Avg_Salary |
++---------------+------------+------------+------------+
+|             1 |      75000 |      75000 | 75000.0000 |
+|             2 |      55000 |      55000 | 55000.0000 |
+|             3 |      60000 |      60000 | 60000.0000 |
+|             4 |      85000 |      85000 | 85000.0000 |
+|             5 |      70000 |      70000 | 70000.0000 |
+|             6 |      45000 |      45000 | 45000.0000 |
+|             7 |      95000 |      95000 | 95000.0000 |
+|             8 |      55000 |      55000 | 55000.0000 |
+|             9 |      72000 |      72000 | 72000.0000 |
++---------------+------------+------------+------------+
+
+
+SELECT COUNT(*) AS Employees_Joined_1985
+    -> FROM Employee
+    -> WHERE YEAR(Hiredate) = 1985;
++-----------------------+
+| Employees_Joined_1985 |
++-----------------------+
+|                     0 |
++-----------------------+
+
+
+SELECT E.Employee_Id, E.Lastname, E.Firstname
+    -> FROM Employee E
+    -> JOIN Department D ON E.Department_Id = D.Department_Id
+    -> JOIN Location L ON D.Location_Id = L.Location_Id
+    -> WHERE L.Regional_Group = 'New York';
+Empty set (0.00 sec)
+
+
+SELECT E.Employee_Id, E.Lastname, E.Firstname, D.Name AS Department_Name
+    -> FROM Employee E
+    -> JOIN Department D ON E.Department_Id = D.Department_Id;
++-------------+-----------+-----------+------------------+
+| Employee_Id | Lastname  | Firstname | Department_Name  |
++-------------+-----------+-----------+------------------+
+|           1 | Smith     | John      | Sales            |
+|           2 | Johnson   | Emma      | Marketing        |
+|           3 | Williams  | Liam      | HR               |
+|           4 | Brown     | Olivia    | Finance          |
+|           5 | Jones     | Noah      | IT               |
+|           6 | Miller    | Sophia    | Operations       |
+|           7 | Davis     | Isabella  | Customer Service |
+|           8 | Garcia    | Mason     | R&D              |
+|           9 | Rodriguez | Lucas     | Legal            |
++-------------+-----------+-----------+------------------+
+
